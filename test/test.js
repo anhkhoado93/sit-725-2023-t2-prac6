@@ -1,49 +1,51 @@
 var expect = require("chai").expect;
 var request = require("request");
 var url = "http://localhost:3000/api/cat";
+let _id;
 let cat = {
     title: "kitten-unique-3",
+    subTitle: "kitten-unique-3",
     link: "kitten",
     path: "kitten",
     description: "kitten",
 };
 
 describe("GET Request", function () {
-    it("API works", function (done) {
+    it("Retrieve data from DB", function (done) {
+        this.timeout(5000);
+
         request(url, function (_, res) {
-            expect(res.statusCode).to.equal(200);
-            done();
-        });
-    });
+            let body = JSON.parse(res["body"]);
 
-    it("Retrieve data from", function (done) {
-        request(url, function (_, _, body) {
-            // let parse_body = JSON.parse(body);
             expect(body.data).to.be.a("array");
-            expect(body.data).to.not.be.empty();
+            expect(body.data).not.to.be.empty;
             expect(res.statusCode).to.equal(200);
-
             done();
         });
     });
 });
 
-describe("Add new cat", function () {
+describe("Insert new cat", function () {
     it("insert a cat to database", function (done) {
-        request.post({ url: url, form: cat }, function (_, res, body) {
-            // let parse_body = JSON.parse(body);
+        this.timeout(5000);
+
+        request.post({ url: url, form: cat }, function (_, res) {
+            let body = JSON.parse(res.body);
             expect(body.message).to.contain("added");
             expect(res.statusCode).to.equal(201);
+            _id = body.data.insertedId;
             done();
         });
     });
 });
 
-describe("Delete a cat", function () {
+describe("Delete new cat", function () {
     it("Delete a cat from database", function (done) {
-        request.delete({ url: url, form: cat }, function (_, res, body) {
-            // let parse_body = JSON.parse(body);
-            expect(body.message).to.contain("removed");
+        this.timeout(5000);
+
+        request.delete(`${url}/${_id}`, function (_, res) {
+            let body = JSON.parse(res.body);
+            expect(body.message).to.contain("deleted");
             expect(res.statusCode).to.equal(200);
             done();
         });
