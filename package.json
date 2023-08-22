@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/anhkhoado932/sit-725-2023-t2-prac3#readme",
   "dependencies": {
+    "chai": "^4.3.7",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
